@@ -13,12 +13,12 @@ export function Hero() {
     <section className="relative overflow-hidden border-b border-line bg-canvas">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-cover opacity-45"
+        className="pointer-events-none absolute inset-0 bg-cover opacity-80"
         style={{ backgroundImage: "url('/hero-bg-shadow.jpg')", backgroundPosition: '78% 30%' }} />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-canvas via-canvas/85 to-canvas/25" />
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-canvas via-canvas/55 to-canvas/10" />
 
       <div
         aria-hidden="true"
