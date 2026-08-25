@@ -1,11 +1,11 @@
 import React from 'react';
-import { CpuIcon, EyeIcon, GaugeIcon, UploadIcon } from 'lucide-react';
+import { CompassIcon, CpuIcon, EyeIcon, UploadIcon } from 'lucide-react';
 import { SectionHeading } from '../Card';
 import { howItWorks } from '../../data/marketing';
 
 const icons = {
   upload: UploadIcon,
-  gauge: GaugeIcon,
+  gauge: CompassIcon,
   cpu: CpuIcon,
   eye: EyeIcon
 } as const;

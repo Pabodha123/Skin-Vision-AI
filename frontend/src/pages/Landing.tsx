@@ -3,7 +3,9 @@ import { ArrowRightIcon } from 'lucide-react';
 import { Hero } from '../components/landing/Hero';
 import { TrustStrip } from '../components/landing/TrustStrip';
 import { HowItWorks } from '../components/landing/HowItWorks';
+import { LiveDemo } from '../components/landing/LiveDemo';
 import { AiTechnology } from '../components/landing/AiTechnology';
+import { ConditionKnowledge } from '../components/landing/ConditionKnowledge';
 import { Faq } from '../components/landing/Faq';
 import { ButtonLink } from '../components/Button';
 
@@ -13,7 +15,9 @@ export function Landing() {
       <Hero />
       <TrustStrip />
       <HowItWorks />
+      <LiveDemo />
       <AiTechnology />
+      <ConditionKnowledge />
       <Faq />
 
       <section className="relative overflow-hidden bg-ink-900">

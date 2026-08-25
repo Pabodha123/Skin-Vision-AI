@@ -1,23 +1,23 @@
 export const trustPoints = [
 {
   icon: 'scan',
-  title: 'Built with computer vision',
-  body: 'A convolutional model trained on dermatoscopic lesion imagery.'
+  title: 'AI-Powered',
+  body: 'Deep learning image analysis.'
 },
 {
   icon: 'eye',
   title: 'Explainable AI',
-  body: 'Every prediction ships with a Grad-CAM attention map.'
+  body: 'Understand model attention.'
 },
 {
   icon: 'lock',
-  title: 'Privacy-conscious design',
-  body: 'Images are used for the analysis you requested — nothing else.'
+  title: 'Privacy Focused',
+  body: 'Your analysis stays protected.'
 },
 {
   icon: 'book',
-  title: 'Educational & research focused',
-  body: 'A learning tool, never a substitute for clinical judgement.'
+  title: 'Educational',
+  body: 'Not a medical diagnosis.'
 }];
 
 
@@ -25,26 +25,26 @@ export const howItWorks = [
 {
   step: '01',
   title: 'Upload',
-  body: 'Add a clear image of the skin lesion from your camera or library.',
+  body: 'Upload a clear skin image.',
   icon: 'upload'
 },
 {
   step: '02',
-  title: 'Quality check',
-  body: 'We check focus, lighting and framing before the model runs.',
-  icon: 'gauge'
-},
-{
-  step: '03',
   title: 'Analyze',
-  body: 'A deep-learning model reads the visual patterns in the image.',
+  body: 'Our AI examines visual patterns.',
   icon: 'cpu'
 },
 {
-  step: '04',
+  step: '03',
   title: 'Understand',
-  body: 'See the prediction, its confidence, and what drove it.',
+  body: 'See the prediction and Grad-CAM explanation.',
   icon: 'eye'
+},
+{
+  step: '04',
+  title: 'Take the Next Step',
+  body: 'Explore general information and appropriate guidance.',
+  icon: 'gauge'
 }];
 
 
@@ -123,6 +123,95 @@ export const footerLinks = [
 { label: 'Terms', to: '/profile' },
 { label: 'Disclaimer', to: '/profile' },
 { label: 'Contact', to: '/profile' }];
+
+
+export interface ConditionKnowledgeEntry {
+  code: string;
+  emoji: string;
+  color: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  whatToKnow?: string[];
+  note?: string;
+}
+
+export const conditionKnowledge: ConditionKnowledgeEntry[] = [
+{
+  code: 'nv',
+  emoji: '🟢',
+  color: '#2f855a',
+  name: 'Melanocytic Nevus',
+  subtitle: 'Commonly known as a mole',
+  description:
+  'Melanocytic nevi are common benign growths made up of melanocytes, the cells responsible for producing pigment. They can appear in many different forms and may vary in color, shape and structure.',
+  whatToKnow: ['Usually benign', 'Can vary in appearance', 'Changes over time are worth monitoring']
+},
+{
+  code: 'mel',
+  emoji: '🔴',
+  color: '#b4553f',
+  name: 'Melanoma',
+  subtitle: 'A potentially serious skin cancer',
+  description:
+  'Melanoma develops from pigment-producing cells and can sometimes spread to other parts of the body. Finding suspicious changes early is important, although visual appearance alone cannot confirm melanoma.',
+  whatToKnow: [
+  'Changes in size',
+  'Changes in shape',
+  'Irregular borders',
+  'Multiple or changing colors',
+  'A spot that is changing over time'],
+
+  note:
+  'A suspicious lesion should be evaluated by a qualified healthcare professional. A definitive skin-cancer diagnosis requires appropriate clinical assessment and, when indicated, biopsy.'
+},
+{
+  code: 'bkl',
+  emoji: '🟤',
+  color: '#93703a',
+  name: 'Benign Keratosis',
+  subtitle: 'Common non-cancerous keratotic lesions',
+  description:
+  'This category includes several benign lesions such as seborrhoeic keratoses and related keratosis-like lesions. Some can have visual characteristics that overlap with more concerning lesions, which is one reason image-based classification can be challenging.'
+},
+{
+  code: 'bcc',
+  emoji: '🟠',
+  color: '#c9762f',
+  name: 'Basal Cell Carcinoma',
+  subtitle: 'A common type of skin cancer',
+  description:
+  'Basal cell carcinoma is a common skin cancer. It generally grows slowly and rarely spreads to distant parts of the body, but untreated lesions can grow destructively into surrounding tissue.',
+  note: 'An AI prediction should never be treated as confirmation of cancer. Concerning lesions should be assessed by a healthcare professional.'
+},
+{
+  code: 'akiec',
+  emoji: '🟡',
+  color: '#b08b4f',
+  name: 'Actinic Keratosis',
+  subtitle: 'A sun-related precancerous skin growth',
+  description:
+  'Actinic keratosis, also called solar keratosis, develops after cumulative UV-related skin damage. It commonly appears as a rough or scaly spot on sun-exposed areas such as the face, ears, scalp, neck or hands. Some actinic keratoses can progress to squamous cell carcinoma.',
+  note: 'Long-term sun protection is important, and suspicious or persistent lesions should be evaluated professionally.'
+},
+{
+  code: 'vasc',
+  emoji: '🔵',
+  color: '#3182ce',
+  name: 'Vascular Lesion',
+  subtitle: 'Lesions associated with blood vessels',
+  description:
+  'Vascular lesions can appear red, purple or blue because their appearance is related to blood vessels or blood within the skin. Examples include haemangiomas and other vascular changes.'
+},
+{
+  code: 'df',
+  emoji: '🟣',
+  color: '#805ad5',
+  name: 'Dermatofibroma',
+  subtitle: 'Usually a benign skin growth',
+  description:
+  'Dermatofibroma is a common benign skin lesion. It is generally firm and can appear as a small, darker or skin-colored bump. Dermatoscopically, one common pattern includes a peripheral network with a central lighter area.'
+}];
 
 
 export const FULL_DISCLAIMER =
