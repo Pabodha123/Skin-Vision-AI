@@ -46,6 +46,10 @@ def _build_sections(rec: dict) -> list[dict]:
         {"heading": "Common characteristics", "body": " ".join(f"{c}." for c in rec["characteristics"])},
         {"heading": "What to watch for", "body": " ".join(f"{w}." for w in rec["warning_signs"])},
         {"heading": "When to seek professional advice", "body": rec["professional_advice"]},
+        {
+            "heading": rec["general_skin_health_tips"]["heading"],
+            "body": rec["general_skin_health_tips"]["body"],
+        },
     ]
 
 

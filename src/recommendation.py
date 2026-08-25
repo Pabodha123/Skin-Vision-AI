@@ -24,6 +24,18 @@ RISK_TIER_LABELS = {
     "professional_evaluation": "Professional Evaluation Recommended",
 }
 
+# general skin-care guidance shown alongside every prediction, regardless of
+# the predicted class - habits that affect skin health day to day
+GENERAL_SKIN_HEALTH_TIPS = {
+    "heading": "Protecting your skin day to day",
+    "body": (
+        "Whatever the prediction, everyday habits affect skin health. Try to limit or avoid: "
+        "smoking, excessive sun exposure, chlorine exposure, excessively hot showers, ongoing "
+        "stress, high sugar intake, excessive alcohol consumption, sleeping in makeup, and "
+        "over-exfoliating."
+    ),
+}
+
 
 def get_recommendation(predicted_code, confidence=None):
     """Look up the recommendation info for a predicted class code (e.g. "mel").
@@ -36,6 +48,7 @@ def get_recommendation(predicted_code, confidence=None):
     info["code"] = predicted_code
     info["risk_tier_label"] = RISK_TIER_LABELS[info["risk_tier"]]
     info["disclaimer"] = DISCLAIMER
+    info["general_skin_health_tips"] = GENERAL_SKIN_HEALTH_TIPS
 
     if confidence is not None and confidence < LOW_CONFIDENCE_THRESHOLD:
         info["risk_tier"] = "professional_evaluation"

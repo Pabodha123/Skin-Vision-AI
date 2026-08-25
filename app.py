@@ -61,6 +61,8 @@ def analyze(image):
         + "".join(f"- {w}\n" for w in rec["warning_signs"])
         + "\n**General guidance**\n"
         + "".join(f"- {g}\n" for g in rec["general_care"])
+        + f"\n**{rec['general_skin_health_tips']['heading']}**\n\n"
+        + rec["general_skin_health_tips"]["body"] + "\n"
     )
     if "low_confidence_note" in rec:
         recommendation_md += f"\n> ⚠️ {rec['low_confidence_note']}\n"
