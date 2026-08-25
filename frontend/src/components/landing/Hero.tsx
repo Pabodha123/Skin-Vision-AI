@@ -68,11 +68,25 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.08, ease: [0.23, 1, 0.32, 1] }}
-          className="relative mx-auto w-full max-w-[420px] sm:max-w-[480px]">
+          className="relative mx-auto w-full max-w-[420px] py-6 sm:max-w-[480px] lg:py-10">
           <img
             src="/hero-mockup.png"
             alt="The SkinVision AI mobile app showing a skin analysis, confidence score, and AI attention map"
-            className="w-full rounded-4xl" />
+            className="relative z-10 w-full rounded-4xl" />
+
+          <motion.div
+            initial={{ opacity: 0, x: -10, rotate: 0 }}
+            animate={{ opacity: 1, x: 0, rotate: -6 }}
+            transition={{ duration: 0.45, delay: 0.35, ease: [0.23, 1, 0.32, 1] }}
+            className="absolute -left-6 bottom-2 z-0 hidden w-[140px] overflow-hidden rounded-2xl border border-line bg-white shadow-lift sm:block lg:-left-14 lg:w-[168px]">
+            <img
+              src="/hero-portrait.jpg"
+              alt="Close-up of healthy, natural skin"
+              className="aspect-[4/5] w-full object-cover" />
+            <p className="border-t border-line px-3 py-2 text-[11px] font-semibold text-ink-900">
+              Your skin, understood
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>);
