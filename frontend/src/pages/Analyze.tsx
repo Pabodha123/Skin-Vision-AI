@@ -22,6 +22,7 @@ export function Analyze() {
   const [phase, setPhase] = useState<Phase>(uploadedImage ? 'preview' : 'upload');
   const [checking, setChecking] = useState(false);
   const [stageIndex, setStageIndex] = useState(FIRST_MODEL_STAGE);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const runQualityCheck = useCallback(
     async (url: string) => {
@@ -46,8 +47,14 @@ export function Analyze() {
       .then(() => {
         if (!cancelled) navigate('/results');
       })
-      .catch(() => {
-        if (!cancelled) setPhase('failed');
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setErrorMessage(
+          err instanceof Error ?
+          err.message :
+          'Something went wrong on our side. Your image was not saved. Please try again.'
+        );
+        setPhase('failed');
       });
 
     return () => {
@@ -89,7 +96,7 @@ export function Analyze() {
         {phase === 'failed' ?
         <ErrorState
           title="We couldn’t complete the analysis."
-          body="Something went wrong on our side. Your image was not saved. Please try again."
+          body={errorMessage ?? 'Something went wrong on our side. Your image was not saved. Please try again.'}
           actionLabel="Try Again"
           onAction={() => {
             setStageIndex(FIRST_MODEL_STAGE);

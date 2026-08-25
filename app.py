@@ -30,6 +30,17 @@ def analyze(image):
 
     image_bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     result = run_prediction(image_bgr, top_k=3)
+
+    if not result["is_likely_skin_image"]:
+        warning_md = (
+            "## ⚠️ This doesn't look like a skin lesion photo\n\n"
+            "SkinVision AI is trained specifically on close-up photos of skin lesions and moles. "
+            "This image doesn't appear to match that, so no prediction was made. Please upload a "
+            "clear, close-up photo of the skin area you want analyzed.\n\n"
+            f"*(estimated likelihood this is a skin photo: {result['skin_likelihood']:.0%})*"
+        )
+        return None, warning_md, ""
+
     rec = result["recommendation"]
 
     prediction_md = (

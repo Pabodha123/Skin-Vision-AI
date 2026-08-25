@@ -40,7 +40,10 @@ export function AnalysisProvider({ children }: { children: React.ReactNode }) {
     formData.append('file', blob, fileName ?? 'upload.jpg');
 
     const res = await fetch('/api/analyze', { method: 'POST', body: formData });
-    if (!res.ok) throw new Error('Analysis failed');
+    if (!res.ok) {
+      const body: { detail?: string } | null = await res.json().catch(() => null);
+      throw new Error(body?.detail ?? 'Analysis failed');
+    }
 
     const data: AnalysisResult = await res.json();
     setResult(data);

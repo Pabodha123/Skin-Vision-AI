@@ -58,6 +58,16 @@ async def analyze(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Could not read that image file.")
 
     result = run_prediction(image_bgr, top_k=3)
+
+    if not result["is_likely_skin_image"]:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "This doesn't look like a skin lesion photo. Please upload a clear, "
+                "close-up photo of the skin area you want analyzed."
+            ),
+        )
+
     rec = result["recommendation"]
 
     entry = save_history_entry(

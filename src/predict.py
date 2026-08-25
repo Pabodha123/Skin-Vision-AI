@@ -4,6 +4,7 @@ import cv2
 import torch
 
 from config import CLASS_NAMES, DEVICE, IMAGE_SIZE, MODELS_DIR, NUM_CLASSES
+from content_check import looks_like_skin_image
 from gradcam import generate_gradcam
 from model import build_model
 from recommendation import INDEX_TO_CODE, get_recommendation_by_index
@@ -42,13 +43,25 @@ def predict(image_bgr, top_k=3):
     """Run the full inference pipeline on a raw (cv2-loaded, BGR) image.
 
     Returns a dict with:
+      is_likely_skin_image - whether the image plausibly shows a skin lesion at all
+      skin_likelihood  - the underlying 0-1 score behind that decision
       top_predictions  - list of {code, name, confidence}, sorted by confidence desc
       predicted_code / predicted_name / confidence - the top-1 result
       gradcam_overlay  - RGB uint8 heatmap-overlaid image explaining the top-1 prediction
       gradcam_heatmap  - RGB uint8 colorized heatmap alone (same size as gradcam_overlay)
       original_resized - RGB uint8 input image resized to match the Grad-CAM outputs
       recommendation   - dict from recommendation.get_recommendation_by_index
+
+    The 7-class model is only meaningful for skin lesion photos - for anything else
+    (a photo of an object, animal, document, etc.) it will still confidently pick one
+    of its 7 classes, which would be actively misleading. is_likely_skin_image is a
+    CLIP-based sanity check that runs first; when it's False, the rest of the fields
+    above are omitted rather than presenting a fabricated result.
     """
+    is_skin, skin_likelihood = looks_like_skin_image(image_bgr)
+    if not is_skin:
+        return {"is_likely_skin_image": False, "skin_likelihood": skin_likelihood}
+
     model, device = _load_model()
 
     image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
@@ -72,6 +85,8 @@ def predict(image_bgr, top_k=3):
     recommendation = get_recommendation_by_index(top1_index, confidence=top1_confidence)
 
     return {
+        "is_likely_skin_image": True,
+        "skin_likelihood": skin_likelihood,
         "top_predictions": top_predictions,
         "predicted_code": INDEX_TO_CODE[top1_index],
         "predicted_name": CLASS_NAMES[top1_index],
