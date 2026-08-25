@@ -71,11 +71,11 @@ export function Hero() {
           className="relative mx-auto w-full max-w-[460px] py-6 sm:max-w-[540px] lg:py-10">
           {/* Phone mockup is confined to the right ~72% so the portrait card below
               has dedicated space on the left instead of overlapping it. */}
-          <div className="ml-auto w-full sm:w-[72%]">
+          <div className="ml-auto w-[80%] max-w-[280px] sm:w-[72%] sm:max-w-none">
             <img
               src="/hero-mockup.png"
               alt="The SkinVision AI mobile app showing a skin analysis, confidence score, and AI attention map"
-              className="relative z-10 w-full rounded-4xl" />
+              className="relative z-10 aspect-[3/4] w-full rounded-4xl object-cover object-top" />
           </div>
 
           <motion.div

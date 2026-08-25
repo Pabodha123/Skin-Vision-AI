@@ -54,15 +54,15 @@ export function GradCAMViewer({ images }: {images: Record<View, string>;}) {
         {tabs.map((t) =>
         <figure
           key={t.id}
-          className="w-[78%] shrink-0 snap-center overflow-hidden rounded-2xl border border-line">
-          
+          className="w-[58%] max-w-[220px] shrink-0 snap-center overflow-hidden rounded-2xl border border-line">
+
             <img
             src={images[t.id]}
             alt={alts[t.id]}
             loading="lazy"
             className="aspect-square w-full object-cover" />
-          
-            <figcaption className="border-t border-line bg-white px-4 py-3 text-[13px] font-semibold text-ink-900">
+
+            <figcaption className="border-t border-line bg-white px-3 py-2.5 text-[12px] font-semibold text-ink-900">
               {t.id === 'original' ? 'Original Image' : `AI Attention Map · ${t.label}`}
             </figcaption>
           </figure>

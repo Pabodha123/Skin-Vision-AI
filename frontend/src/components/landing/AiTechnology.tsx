@@ -72,7 +72,7 @@ export function AiTechnology() {
             ))}
           </div>
 
-          <figure className="mt-4 overflow-hidden rounded-3xl border border-line bg-canvas shadow-card">
+          <figure className="mt-4 mx-auto max-w-[300px] overflow-hidden rounded-3xl border border-line bg-canvas shadow-card sm:max-w-none">
             <img
               key={view}
               src={images[view]}
