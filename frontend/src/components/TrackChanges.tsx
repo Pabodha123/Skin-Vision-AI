@@ -8,7 +8,6 @@ import type { HistoryEntry } from '../types/analysis';
 
 interface TimelineEntry {
   id: string;
-  month: string;
   date: string;
   imageUrl: string;
   label: string;
@@ -19,10 +18,6 @@ interface TimelineEntry {
 function buildTimeline(entries: HistoryEntry[]): TimelineEntry[] {
   const ascending = [...entries].sort((a, b) => a.timestamp - b.timestamp);
   return ascending.map((entry, i) => {
-    const month = new Date(entry.timestamp).toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric',
-    });
     let note = 'First saved scan.';
     if (i > 0) {
       const prev = ascending[i - 1];
@@ -33,7 +28,6 @@ function buildTimeline(entries: HistoryEntry[]): TimelineEntry[] {
     }
     return {
       id: entry.id,
-      month,
       date: entry.date,
       imageUrl: entry.imageUrl,
       label: entry.label,
@@ -125,27 +119,6 @@ export function TrackChanges() {
         </div>
       </div>
 
-      <ol className="no-scrollbar -mx-5 mt-6 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-        {timeline.map((entry, i) => {
-          const active = i === selected;
-          return (
-            <li key={entry.id}>
-              <button
-                onClick={() => setSelected(i)}
-                aria-pressed={active}
-                className={`min-h-[44px] whitespace-nowrap rounded-full border px-4 py-2.5 text-[13.5px] font-semibold transition-colors duration-200 ease-out ${
-                active ?
-                'border-ink-800 bg-ink-800 text-canvas' :
-                'border-line bg-white text-muted hover:bg-gold-50'}`
-                }>
-
-                {entry.month}
-              </button>
-            </li>);
-
-        })}
-      </ol>
-
       <motion.div
         key={current.id}
         initial={{ opacity: 0, y: 8 }}
@@ -169,7 +142,7 @@ export function TrackChanges() {
               {hasPrevious ?
               <span className="ml-1.5 text-ink-700">
                   ({delta >= 0 ? '+' : ''}
-                  {delta.toFixed(1)} vs {previous.month})
+                  {delta.toFixed(1)} vs {previous.date})
                 </span> :
               null}
             </p>
@@ -198,7 +171,7 @@ export function TrackChanges() {
 
       <BottomSheet
         open={compareOpen}
-        title={`${previous.month} vs ${current.month}`}
+        title={`${previous.date} vs ${current.date}`}
         onClose={() => setCompareOpen(false)}>
 
         <div className="flex items-start gap-3">
