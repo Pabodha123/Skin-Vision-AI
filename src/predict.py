@@ -3,7 +3,7 @@ import os
 import cv2
 import torch
 
-from config import CLASS_NAMES, DEVICE, MODELS_DIR, NUM_CLASSES
+from config import CLASS_NAMES, DEVICE, IMAGE_SIZE, MODELS_DIR, NUM_CLASSES
 from gradcam import generate_gradcam
 from model import build_model
 from recommendation import INDEX_TO_CODE, get_recommendation_by_index
@@ -45,6 +45,8 @@ def predict(image_bgr, top_k=3):
       top_predictions  - list of {code, name, confidence}, sorted by confidence desc
       predicted_code / predicted_name / confidence - the top-1 result
       gradcam_overlay  - RGB uint8 heatmap-overlaid image explaining the top-1 prediction
+      gradcam_heatmap  - RGB uint8 colorized heatmap alone (same size as gradcam_overlay)
+      original_resized - RGB uint8 input image resized to match the Grad-CAM outputs
       recommendation   - dict from recommendation.get_recommendation_by_index
     """
     model, device = _load_model()
@@ -65,7 +67,8 @@ def predict(image_bgr, top_k=3):
     top1_index = top_indices[0]
     top1_confidence = probs[top1_index].item()
 
-    overlay, _ = generate_gradcam(model, image_bgr, target_class=top1_index, device=device)
+    overlay, heatmap, _ = generate_gradcam(model, image_bgr, target_class=top1_index, device=device)
+    original_resized = cv2.resize(image_rgb, (IMAGE_SIZE, IMAGE_SIZE))
     recommendation = get_recommendation_by_index(top1_index, confidence=top1_confidence)
 
     return {
@@ -74,5 +77,7 @@ def predict(image_bgr, top_k=3):
         "predicted_name": CLASS_NAMES[top1_index],
         "confidence": top1_confidence,
         "gradcam_overlay": overlay,
+        "gradcam_heatmap": heatmap,
+        "original_resized": original_resized,
         "recommendation": recommendation,
     }

@@ -5,7 +5,7 @@ import { Disclaimer } from '../components/Disclaimer';
 import { EmptyState } from '../components/EmptyState';
 import { CardListSkeleton } from '../components/Skeleton';
 import { ButtonLink } from '../components/Button';
-import { historyEntries } from '../data/analysis';
+import type { HistoryEntry } from '../types/analysis';
 
 const filters = [
 { id: 'all', label: 'All' },
@@ -21,13 +21,24 @@ const;
 
 export function History() {
   const [loading, setLoading] = useState(true);
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<(typeof filters)[number]['id']>('all');
   const [sort, setSort] = useState<(typeof sorts)[number]['id']>('newest');
 
   useEffect(() => {
-    const id = window.setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(id);
+    let cancelled = false;
+    fetch('/api/history')
+      .then((res) => res.json())
+      .then((data: HistoryEntry[]) => {
+        if (!cancelled) setHistoryEntries(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const entries = useMemo(() => {
@@ -47,7 +58,7 @@ export function History() {
       if (sort === 'oldest') return a.timestamp - b.timestamp;
       return b.timestamp - a.timestamp;
     });
-  }, [query, filter, sort]);
+  }, [historyEntries, query, filter, sort]);
 
   return (
     <main className="mx-auto max-w-page px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-20 lg:pt-12">

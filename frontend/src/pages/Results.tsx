@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookmarkIcon, RotateCcwIcon } from 'lucide-react';
 import { Button, ButtonLink } from '../components/Button';
@@ -28,6 +29,10 @@ export function Results() {
     const id = window.setTimeout(() => setLoading(false), 650);
     return () => clearTimeout(id);
   }, []);
+
+  if (!result) {
+    return <Navigate to="/analyze" replace />;
+  }
 
   return (
     <main className="mx-auto max-w-page px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-20 lg:pt-12">

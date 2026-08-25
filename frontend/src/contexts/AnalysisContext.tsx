@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { mockResult } from '../data/analysis';
+import React, { createContext, useContext, useState } from 'react';
 import type { AnalysisResult, ImageQuality } from '../types/analysis';
 
 interface AnalysisContextValue {
@@ -9,45 +8,50 @@ interface AnalysisContextValue {
   setUpload: (url: string, name: string) => void;
   setQuality: (quality: ImageQuality | null) => void;
   clearUpload: () => void;
-  result: AnalysisResult;
+  result: AnalysisResult | null;
+  analyze: () => Promise<void>;
 }
 
 const AnalysisContext = createContext<AnalysisContextValue | null>(null);
 
-export function AnalysisProvider({ children }: {children: React.ReactNode;}) {
+export function AnalysisProvider({ children }: { children: React.ReactNode }) {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [quality, setQuality] = useState<ImageQuality | null>(null);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
 
-  const value = useMemo<AnalysisContextValue>(() => {
-    const result: AnalysisResult = uploadedImage ?
-    {
-      ...mockResult,
-      imageUrl: uploadedImage,
-      gradcam: { ...mockResult.gradcam, original: uploadedImage }
-    } :
-    mockResult;
+  const setUpload = (url: string, name: string) => {
+    setUploadedImage(url);
+    setFileName(name);
+    setQuality(null);
+  };
 
-    return {
-      uploadedImage,
-      fileName,
-      quality,
-      result,
-      setQuality,
-      setUpload: (url: string, name: string) => {
-        setUploadedImage(url);
-        setFileName(name);
-        setQuality(null);
-      },
-      clearUpload: () => {
-        setUploadedImage(null);
-        setFileName(null);
-        setQuality(null);
-      }
-    };
-  }, [uploadedImage, fileName, quality]);
+  const clearUpload = () => {
+    setUploadedImage(null);
+    setFileName(null);
+    setQuality(null);
+  };
 
-  return <AnalysisContext.Provider value={value}>{children}</AnalysisContext.Provider>;
+  const analyze = async () => {
+    if (!uploadedImage) throw new Error('No image selected');
+
+    const blob = await fetch(uploadedImage).then((r) => r.blob());
+    const formData = new FormData();
+    formData.append('file', blob, fileName ?? 'upload.jpg');
+
+    const res = await fetch('/api/analyze', { method: 'POST', body: formData });
+    if (!res.ok) throw new Error('Analysis failed');
+
+    const data: AnalysisResult = await res.json();
+    setResult(data);
+  };
+
+  return (
+    <AnalysisContext.Provider
+      value={{ uploadedImage, fileName, quality, setUpload, setQuality, clearUpload, result, analyze }}>
+      {children}
+    </AnalysisContext.Provider>
+  );
 }
 
 export function useAnalysis() {

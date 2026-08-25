@@ -8,7 +8,7 @@ import { ImagePreview } from '../components/ImagePreview';
 import { AnalysisLoader } from '../components/AnalysisLoader';
 import { ErrorState } from '../components/ErrorState';
 import { Disclaimer } from '../components/Disclaimer';
-import { analysisStages, mockResult } from '../data/analysis';
+import { analysisStages } from '../data/analysis';
 import { assessImageQuality } from '../utils/imageQuality';
 import { useAnalysis } from '../contexts/AnalysisContext';
 
@@ -18,7 +18,7 @@ const FIRST_MODEL_STAGE = 2;
 
 export function Analyze() {
   const navigate = useNavigate();
-  const { uploadedImage, fileName, quality, setUpload, setQuality, clearUpload } = useAnalysis();
+  const { uploadedImage, fileName, quality, setUpload, setQuality, clearUpload, analyze } = useAnalysis();
   const [phase, setPhase] = useState<Phase>(uploadedImage ? 'preview' : 'upload');
   const [checking, setChecking] = useState(false);
   const [stageIndex, setStageIndex] = useState(FIRST_MODEL_STAGE);
@@ -40,17 +40,21 @@ export function Analyze() {
     for (let i = 1; i <= remaining; i += 1) {
       timers.push(window.setTimeout(() => setStageIndex(FIRST_MODEL_STAGE + i), 1100 * i));
     }
-    timers.push(
-      window.setTimeout(() => {
-        // The explanation images have to be reachable before the report is worth showing.
-        const probe = new Image();
-        probe.onload = () => navigate('/results');
-        probe.onerror = () => setPhase('failed');
-        probe.src = mockResult.gradcam.overlay;
-      }, 1100 * (remaining + 0.6))
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [phase, navigate]);
+
+    let cancelled = false;
+    void analyze()
+      .then(() => {
+        if (!cancelled) navigate('/results');
+      })
+      .catch(() => {
+        if (!cancelled) setPhase('failed');
+      });
+
+    return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+    };
+  }, [phase, analyze, navigate]);
 
   const reset = () => {
     clearUpload();

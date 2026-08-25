@@ -1,14 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, GitCompareIcon } from 'lucide-react';
 import { Card } from './Card';
 import { Button } from './Button';
 import { BottomSheet } from './BottomSheet';
-import { trackedTimeline } from '../data/analysis';
+import type { HistoryEntry } from '../types/analysis';
 
-type Entry = (typeof trackedTimeline)[number];
+interface TimelineEntry {
+  id: string;
+  month: string;
+  date: string;
+  imageUrl: string;
+  label: string;
+  confidence: number;
+  note: string;
+}
 
-function Snapshot({ entry, role }: {entry: Entry;role: string;}) {
+function buildTimeline(entries: HistoryEntry[]): TimelineEntry[] {
+  const ascending = [...entries].sort((a, b) => a.timestamp - b.timestamp);
+  return ascending.map((entry, i) => {
+    const month = new Date(entry.timestamp).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+    let note = 'First saved scan.';
+    if (i > 0) {
+      const prev = ascending[i - 1];
+      note =
+        prev.label === entry.label ?
+        `Same predicted condition as ${prev.date}.` :
+        `Predicted condition changed from ${prev.label} to ${entry.label}.`;
+    }
+    return {
+      id: entry.id,
+      month,
+      date: entry.date,
+      imageUrl: entry.imageUrl,
+      label: entry.label,
+      confidence: entry.confidence,
+      note
+    };
+  });
+}
+
+function Snapshot({ entry, role }: {entry: TimelineEntry;role: string;}) {
   return (
     <div className="flex-1 rounded-2xl border border-line bg-white p-4">
       <p className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-muted">{role}</p>
@@ -18,7 +53,7 @@ function Snapshot({ entry, role }: {entry: Entry;role: string;}) {
           alt={`Lesion photographed on ${entry.date}`}
           loading="lazy"
           className="aspect-square w-full object-cover" />
-        
+
       </div>
       <p className="mt-3 text-[13px] font-semibold text-muted">{entry.date}</p>
       <h4 className="mt-0.5 text-[15.5px] font-bold tracking-[-0.02em] text-ink-900">
@@ -32,11 +67,44 @@ function Snapshot({ entry, role }: {entry: Entry;role: string;}) {
 }
 
 export function TrackChanges() {
-  const [selected, setSelected] = useState(trackedTimeline.length - 1);
+  const [timeline, setTimeline] = useState<TimelineEntry[]>([]);
+  const [selected, setSelected] = useState(0);
   const [compareOpen, setCompareOpen] = useState(false);
 
-  const current = trackedTimeline[selected];
-  const previous = trackedTimeline[Math.max(selected - 1, 0)];
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/history')
+      .then((res) => res.json())
+      .then((data: HistoryEntry[]) => {
+        if (cancelled) return;
+        const built = buildTimeline(data);
+        setTimeline(built);
+        setSelected(Math.max(built.length - 1, 0));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (timeline.length === 0) {
+    return (
+      <Card>
+        <p className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-gold-600">
+          Monitoring
+        </p>
+        <h2 className="mt-2 text-[22px] font-bold tracking-[-0.03em] text-ink-900 sm:text-2xl">
+          Track changes over time
+        </h2>
+        <p className="mt-2 text-[14.5px] leading-relaxed text-muted">
+          Run another analysis of the same spot later and it will show up here, so you can compare
+          how it looks over time.
+        </p>
+      </Card>);
+
+  }
+
+  const current = timeline[selected];
+  const previous = timeline[Math.max(selected - 1, 0)];
   const hasPrevious = selected > 0;
   const delta = current.confidence - previous.confidence;
 
@@ -58,7 +126,7 @@ export function TrackChanges() {
       </div>
 
       <ol className="no-scrollbar -mx-5 mt-6 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-        {trackedTimeline.map((entry, i) => {
+        {timeline.map((entry, i) => {
           const active = i === selected;
           return (
             <li key={entry.id}>
@@ -70,7 +138,7 @@ export function TrackChanges() {
                 'border-ink-800 bg-ink-800 text-canvas' :
                 'border-line bg-white text-muted hover:bg-gold-50'}`
                 }>
-                
+
                 {entry.month}
               </button>
             </li>);
@@ -84,13 +152,13 @@ export function TrackChanges() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.26, ease: [0.23, 1, 0.32, 1] }}
         className="mt-5 rounded-2xl border border-line bg-gold-50/60 p-4">
-        
+
         <div className="flex items-center gap-4">
           <img
             src={current.imageUrl}
             alt={`Lesion photographed on ${current.date}`}
             className="h-[84px] w-[84px] shrink-0 rounded-xl border border-line object-cover" />
-          
+
           <div className="min-w-0">
             <p className="text-[12.5px] font-semibold text-muted">{current.date}</p>
             <h3 className="mt-0.5 truncate text-[16.5px] font-bold tracking-[-0.02em] text-ink-900">
@@ -118,7 +186,7 @@ export function TrackChanges() {
         className="mt-5 w-full sm:w-auto"
         disabled={!hasPrevious}
         onClick={() => setCompareOpen(true)}>
-        
+
         <GitCompareIcon className="h-4 w-4" aria-hidden="true" />
         Compare Images
       </Button>
@@ -132,13 +200,13 @@ export function TrackChanges() {
         open={compareOpen}
         title={`${previous.month} vs ${current.month}`}
         onClose={() => setCompareOpen(false)}>
-        
+
         <div className="flex items-start gap-3">
           <Snapshot entry={previous} role="Previous" />
           <ArrowRightIcon
             className="mt-24 hidden h-5 w-5 shrink-0 text-gold-500 sm:block"
             aria-hidden="true" />
-          
+
           <Snapshot entry={current} role="Current" />
         </div>
         <p className="mt-5 text-[13px] leading-relaxed text-muted">
