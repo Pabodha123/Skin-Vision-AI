@@ -1,0 +1,14 @@
+.git
+venv/
+.venv/
+data/
+models/
+outputs/
+history/
+docs/
+notebooks/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.cache/
+requirements.txt
