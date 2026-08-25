@@ -19,5 +19,8 @@ outputs/*.png
 outputs/*.csv
 outputs/*.json
 
+# User-generated local scan history (per-machine, not shared)
+history/
+
 # Caches
 .cache/

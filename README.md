@@ -8,8 +8,9 @@ An explainable computer-vision web app that analyzes skin lesion images, predict
 
 1. Upload a skin lesion photo
 2. A fine-tuned EfficientNet-B0 model predicts the most likely lesion class, with a confidence score and top-3 ranked predictions
-3. Grad-CAM highlights the image regions the model focused on
-4. A recommendation engine returns condition information, warning signs, and general guidance — escalating to "seek professional evaluation" automatically whenever confidence is low or the predicted class is one of the higher-risk categories
+3. Grad-CAM highlights the image regions the model focused on — answering "why did the AI make this prediction?"
+4. A recommendation engine returns condition information, warning signs, and general guidance — escalating to "seek professional evaluation" automatically whenever confidence is low or the predicted class is one of the higher-risk categories. It never recommends medication — only general care, warning signs to watch for, and when to see a dermatologist.
+5. Every scan is saved locally, so you can track how a lesion looks across scans over time (the "Track Changes Over Time" tab) and compare two past photos side by side
 
 ## Dataset & classes
 
@@ -48,6 +49,7 @@ SkinVision-AI/
     ├── gradcam.py              # Grad-CAM explainability
     ├── conditions.json         # per-class descriptions, warning signs, guidance
     ├── recommendation.py       # maps a prediction → recommendation + risk tier
+    ├── history.py               # local scan history log (for tracking changes over time)
     ├── predict.py               # end-to-end inference pipeline (used by app.py)
     └── utils.py                 # seeding, checkpoints, grouped/stratified data split
 ```

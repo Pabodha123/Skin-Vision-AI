@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src
 import cv2
 import gradio as gr
 
+from history import history_image_path, load_history, save_history_entry
 from predict import predict as run_prediction
 
 DISCLAIMER = (
@@ -19,6 +20,8 @@ RISK_TIER_EMOJI = {
     "needs_attention": "🟡",
     "professional_evaluation": "🔴",
 }
+
+_history_by_label = {}
 
 
 def analyze(image):
@@ -52,7 +55,72 @@ def analyze(image):
         recommendation_md += f"\n> ⚠️ {rec['low_confidence_note']}\n"
     recommendation_md += f"\n**Next step:** {rec['professional_advice']}\n\n---\n{DISCLAIMER}"
 
+    save_history_entry(image_bgr, result["predicted_code"], result["predicted_name"],
+                        result["confidence"], rec["risk_tier"])
+
     return result["gradcam_overlay"], prediction_md, recommendation_md
+
+
+def _format_label(entry):
+    date = entry["timestamp"][:19].replace("T", " ")
+    return f"{date} UTC — {entry['predicted_name']} ({entry['confidence']:.0%})"
+
+
+def refresh_history():
+    global _history_by_label
+    entries = load_history()
+    _history_by_label = {_format_label(e): e for e in entries}
+    labels = list(_history_by_label.keys())
+
+    table_rows = [
+        [
+            e["timestamp"][:19].replace("T", " "),
+            e["predicted_name"],
+            f"{e['confidence']:.1%}",
+            f"{RISK_TIER_EMOJI.get(e['risk_tier'], '')} {e['risk_tier'].replace('_', ' ')}",
+        ]
+        for e in entries
+    ]
+
+    earlier_default = labels[-1] if labels else None
+    later_default = labels[0] if labels else None
+
+    return (
+        table_rows,
+        gr.update(choices=labels, value=earlier_default),
+        gr.update(choices=labels, value=later_default),
+    )
+
+
+def compare_entries(earlier_label, later_label):
+    if not earlier_label or not later_label:
+        return None, None, "Pick an earlier and a later scan to compare."
+
+    earlier = _history_by_label.get(earlier_label)
+    later = _history_by_label.get(later_label)
+    if earlier is None or later is None:
+        return None, None, "Selection not found — try refreshing history."
+
+    earlier_img = cv2.cvtColor(cv2.imread(history_image_path(earlier)), cv2.COLOR_BGR2RGB)
+    later_img = cv2.cvtColor(cv2.imread(history_image_path(later)), cv2.COLOR_BGR2RGB)
+
+    delta = later["confidence"] - earlier["confidence"]
+    same_class = earlier["predicted_code"] == later["predicted_code"]
+
+    summary = (
+        f"**{earlier['timestamp'][:10]}:** {earlier['predicted_name']} — {earlier['confidence']:.1%}\n\n"
+        f"**{later['timestamp'][:10]}:** {later['predicted_name']} — {later['confidence']:.1%}\n\n"
+    )
+    if same_class:
+        summary += f"Same predicted condition across scans. Confidence changed by {delta:+.1%}.\n\n"
+    else:
+        summary += "⚠️ The predicted condition changed between these two scans.\n\n"
+    summary += (
+        "*This comparison is informational only — any visible change in a lesion "
+        "should be evaluated by a dermatologist, regardless of what the AI predicts.*"
+    )
+
+    return earlier_img, later_img, summary
 
 
 with gr.Blocks(title="SkinVision AI") as demo:
@@ -63,21 +131,56 @@ with gr.Blocks(title="SkinVision AI") as demo:
         "consult a dermatologist for an actual diagnosis."
     )
 
-    with gr.Row():
-        with gr.Column():
-            image_input = gr.Image(type="numpy", label="Upload a skin lesion image")
-            analyze_btn = gr.Button("Analyze Image", variant="primary")
-            prediction_output = gr.Markdown()
-        with gr.Column():
-            gradcam_output = gr.Image(label="AI Attention (Grad-CAM)")
+    with gr.Tabs():
+        with gr.Tab("🔬 Analyze"):
+            with gr.Row():
+                with gr.Column():
+                    image_input = gr.Image(type="numpy", label="Upload a skin lesion image")
+                    analyze_btn = gr.Button("Analyze Image", variant="primary")
+                    prediction_output = gr.Markdown()
+                with gr.Column():
+                    gradcam_output = gr.Image(label="AI Attention (Grad-CAM)")
 
-    recommendation_output = gr.Markdown()
+            recommendation_output = gr.Markdown()
+
+        with gr.Tab("📈 Track Changes Over Time"):
+            gr.Markdown(
+                "Every image you analyze is saved locally so you can track how a lesion "
+                "looks across scans over time."
+            )
+            refresh_btn = gr.Button("🔄 Refresh History")
+            history_table = gr.Dataframe(
+                headers=["Date", "Prediction", "Confidence", "Risk Tier"],
+                label="Scan History", interactive=False,
+            )
+            with gr.Row():
+                earlier_dropdown = gr.Dropdown(label="Earlier scan")
+                later_dropdown = gr.Dropdown(label="Later scan")
+            compare_btn = gr.Button("Compare")
+            with gr.Row():
+                earlier_image = gr.Image(label="Earlier")
+                later_image = gr.Image(label="Later")
+            compare_summary = gr.Markdown()
 
     analyze_btn.click(
         fn=analyze,
         inputs=image_input,
         outputs=[gradcam_output, prediction_output, recommendation_output],
+    ).then(
+        fn=refresh_history,
+        outputs=[history_table, earlier_dropdown, later_dropdown],
     )
+
+    refresh_btn.click(
+        fn=refresh_history,
+        outputs=[history_table, earlier_dropdown, later_dropdown],
+    )
+    compare_btn.click(
+        fn=compare_entries,
+        inputs=[earlier_dropdown, later_dropdown],
+        outputs=[earlier_image, later_image, compare_summary],
+    )
+    demo.load(fn=refresh_history, outputs=[history_table, earlier_dropdown, later_dropdown])
 
     gr.Markdown("---")
     gr.Markdown(
