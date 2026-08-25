@@ -27,21 +27,7 @@ Trained on [HAM10000](https://doi.org/10.1038/sdata.2018.161) (10,015 dermoscopi
 
 ## Architecture
 
-```
-Upload → Preprocessing → EfficientNet-B0 (transfer learning) → Prediction
-                                    │
-                        ┌───────────┴───────────┐
-                        ▼                        ▼
-                 Top-3 + Confidence          Grad-CAM heatmap
-                        │                        │
-                        └───────────┬────────────┘
-                                    ▼
-                       Recommendation Engine
-                    (condition info, warning signs,
-                     general guidance, risk tier)
-                                    ▼
-                              Result shown to user
-```
+![SkinVision AI architecture](docs/architecture.png)
 
 ## Project structure
 
