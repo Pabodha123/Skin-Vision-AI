@@ -14,8 +14,17 @@ export function Hero() {
     <section className="relative overflow-hidden border-b border-line bg-canvas">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-gradient-to-b from-gold-50 to-transparent" />
-      
+        className="pointer-events-none absolute inset-0 bg-cover opacity-45"
+        style={{ backgroundImage: "url('/hero-bg-shadow.jpg')", backgroundPosition: '78% 30%' }} />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-canvas via-canvas/85 to-canvas/25" />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-gradient-to-b from-gold-50/70 to-transparent" />
+
       <div className="relative mx-auto grid max-w-page items-center gap-12 px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
         <div>
           <motion.span
