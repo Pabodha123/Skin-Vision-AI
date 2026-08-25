@@ -1,0 +1,53 @@
+import json
+import os
+
+from config import LABEL_MAP
+
+CONDITIONS_PATH = os.path.join(os.path.dirname(__file__), "conditions.json")
+
+with open(CONDITIONS_PATH, encoding="utf-8") as f:
+    CONDITIONS = json.load(f)
+
+INDEX_TO_CODE = {index: code for code, index in LABEL_MAP.items()}
+
+DISCLAIMER = (
+    "SkinVision AI is an educational AI project and is not a medical diagnostic tool. "
+    "Predictions are generated from image patterns and may be incorrect. They should not "
+    "replace examination or advice from a qualified healthcare professional."
+)
+
+LOW_CONFIDENCE_THRESHOLD = 0.5
+
+RISK_TIER_LABELS = {
+    "lower_concern": "Lower Concern",
+    "needs_attention": "Needs Attention",
+    "professional_evaluation": "Professional Evaluation Recommended",
+}
+
+
+def get_recommendation(predicted_code, confidence=None):
+    """Look up the recommendation info for a predicted class code (e.g. "mel").
+
+    If confidence is given and falls below LOW_CONFIDENCE_THRESHOLD, the risk tier is
+    escalated to professional evaluation regardless of the predicted class, since a
+    low-confidence prediction is itself a reason not to trust the specific label.
+    """
+    info = dict(CONDITIONS[predicted_code])
+    info["code"] = predicted_code
+    info["risk_tier_label"] = RISK_TIER_LABELS[info["risk_tier"]]
+    info["disclaimer"] = DISCLAIMER
+
+    if confidence is not None and confidence < LOW_CONFIDENCE_THRESHOLD:
+        info["risk_tier"] = "professional_evaluation"
+        info["risk_tier_label"] = RISK_TIER_LABELS["professional_evaluation"]
+        info["low_confidence_note"] = (
+            f"The model's confidence in this prediction is low ({confidence:.0%}). "
+            "Low-confidence predictions are less reliable, so a professional evaluation "
+            "is recommended regardless of the predicted condition."
+        )
+
+    return info
+
+
+def get_recommendation_by_index(label_index, confidence=None):
+    return get_recommendation(INDEX_TO_CODE[label_index], confidence=confidence)

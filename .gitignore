@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+.venv/
+
+# Dataset (large, not meant to live in git — see README for download instructions)
+data/HAM10000_images/
+data/*.csv
+
+# Trained model weights (large binaries — see README for how to obtain/regenerate)
+models/*.pth
+
+# Generated evaluation/training artifacts
+outputs/*.png
+outputs/*.csv
+outputs/*.json
+
+# Caches
+.cache/

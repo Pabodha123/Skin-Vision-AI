@@ -1,0 +1,160 @@
+{
+  "akiec": {
+    "name": "Actinic Keratosis",
+    "risk_tier": "professional_evaluation",
+    "description": "A rough, scaly patch of skin caused by years of sun exposure. It is considered a precancerous lesion, meaning it can potentially develop into skin cancer (most often squamous cell carcinoma) if left untreated.",
+    "characteristics": [
+      "Rough, dry, or scaly texture",
+      "Pink, red, or brownish color",
+      "Usually on sun-exposed areas (face, ears, scalp, hands, forearms)",
+      "Often easier to feel than to see"
+    ],
+    "warning_signs": [
+      "Lesion becomes thicker or raised",
+      "Becomes tender, itchy, or starts bleeding",
+      "Rapid growth in size",
+      "Ulceration or a sore that does not heal"
+    ],
+    "general_care": [
+      "Protect the area from further sun exposure (sunscreen, protective clothing)",
+      "Avoid picking or scratching the lesion",
+      "Do not attempt to treat or remove it yourself"
+    ],
+    "professional_advice": "Because actinic keratosis is precancerous, a dermatologist should evaluate and, if needed, treat this lesion. Early treatment is simple and highly effective."
+  },
+  "bcc": {
+    "name": "Basal Cell Carcinoma",
+    "risk_tier": "professional_evaluation",
+    "description": "The most common form of skin cancer. It usually grows slowly and rarely spreads to other parts of the body, but it can damage surrounding skin and tissue if left untreated.",
+    "characteristics": [
+      "Pearly or waxy bump, sometimes with visible blood vessels",
+      "Flat, flesh-colored or brown scar-like lesion",
+      "A sore that repeatedly heals and reopens",
+      "Most common on sun-exposed skin (face, neck, ears)"
+    ],
+    "warning_signs": [
+      "A sore that bleeds, oozes, or crusts and does not heal within a few weeks",
+      "Visible growth or change in size or shape",
+      "New shiny or pearly bump on the skin"
+    ],
+    "general_care": [
+      "Avoid sun exposure and use sun protection",
+      "Do not delay seeking a professional opinion",
+      "Keep the area clean and avoid irritating it"
+    ],
+    "professional_advice": "This pattern is associated with skin cancer. Prompt evaluation by a dermatologist is strongly recommended — basal cell carcinoma is highly treatable when caught early."
+  },
+  "bkl": {
+    "name": "Benign Keratosis",
+    "risk_tier": "lower_concern",
+    "description": "A general category of non-cancerous skin growths (such as seborrheic keratoses or solar lentigines) caused by a buildup of skin cells. These are extremely common, especially with age, and are not dangerous.",
+    "characteristics": [
+      "Waxy, \"stuck-on\" appearance",
+      "Light brown to black in color",
+      "Well-defined borders",
+      "Usually stable in size and shape over time"
+    ],
+    "warning_signs": [
+      "Sudden change in color, size, or shape",
+      "New irregular or asymmetric borders developing",
+      "Bleeding, itching, or pain without an obvious cause (e.g. friction)"
+    ],
+    "general_care": [
+      "Generally no treatment is needed",
+      "Monitor for any changes over time",
+      "Avoid scratching or picking at the lesion"
+    ],
+    "professional_advice": "Benign keratoses are typically harmless. Still, if this lesion changes in any way, have it checked by a dermatologist to rule out other conditions that can look similar."
+  },
+  "df": {
+    "name": "Dermatofibroma",
+    "risk_tier": "lower_concern",
+    "description": "A common, benign, firm nodule that forms in the skin, often on the legs. It is thought to form as a reaction to a minor injury such as an insect bite and is not cancerous.",
+    "characteristics": [
+      "Small, firm bump under the skin",
+      "Brown, pink, or reddish color",
+      "Dimples inward when pinched from the sides",
+      "Usually stable and painless"
+    ],
+    "warning_signs": [
+      "Rapid growth in size",
+      "Change in color or shape",
+      "Becomes painful, itchy, or starts bleeding on its own"
+    ],
+    "general_care": [
+      "Usually requires no treatment",
+      "Avoid unnecessary irritation or picking",
+      "Monitor for any changes over time"
+    ],
+    "professional_advice": "Dermatofibromas are benign. If it changes noticeably or bothers you, a dermatologist can confirm the diagnosis and discuss removal options."
+  },
+  "mel": {
+    "name": "Melanoma",
+    "risk_tier": "professional_evaluation",
+    "description": "The most serious form of skin cancer, developing in the pigment-producing cells (melanocytes). It can spread to other parts of the body if not caught early, which makes prompt evaluation important.",
+    "characteristics": [
+      "Often follows the ABCDE pattern: Asymmetry, irregular Border, varied Color, large Diameter, Evolving over time",
+      "May appear as a new mole or a change in an existing mole",
+      "Can occur anywhere on the body, not only sun-exposed areas"
+    ],
+    "warning_signs": [
+      "Asymmetrical shape or irregular, blurred borders",
+      "Multiple colors or uneven color distribution within the lesion",
+      "Diameter larger than a pencil eraser (~6mm)",
+      "Any change in size, shape, color, or elevation",
+      "Bleeding, itching, or crusting"
+    ],
+    "general_care": [
+      "Do not attempt self-treatment or removal",
+      "Avoid further sun exposure to the area",
+      "Take a photo to track any changes until you are seen"
+    ],
+    "professional_advice": "This AI prediction should not be considered a diagnosis, but because melanoma can be serious, prompt professional dermatological evaluation is strongly recommended. Please consult a qualified dermatologist as soon as possible."
+  },
+  "nv": {
+    "name": "Melanocytic Nevus",
+    "risk_tier": "lower_concern",
+    "description": "Commonly known as a mole. It is usually a benign growth of pigment-producing cells (melanocytes) and is extremely common — most adults have several.",
+    "characteristics": [
+      "Usually well-defined and symmetric",
+      "Even color throughout (tan, brown, or black)",
+      "Often stable in size and shape over months to years",
+      "Can be flat or slightly raised"
+    ],
+    "warning_signs": [
+      "Rapid change in size",
+      "Change in color or an uneven color pattern developing",
+      "Irregular or blurred borders appearing",
+      "Bleeding, itching, or a new lesion that looks unusual"
+    ],
+    "general_care": [
+      "Monitor the mole for changes over time (consider periodic photos)",
+      "Protect skin from excessive UV exposure",
+      "Seek medical advice if the lesion changes"
+    ],
+    "professional_advice": "Most moles are harmless and need no treatment. If you notice any of the warning signs above, have it examined by a dermatologist to be safe."
+  },
+  "vasc": {
+    "name": "Vascular Lesion",
+    "risk_tier": "lower_concern",
+    "description": "A growth made up of blood vessels, such as a cherry angioma, hemangioma, or similar. These are common and almost always benign.",
+    "characteristics": [
+      "Red, purple, or blue in color",
+      "Often small, round, and dome-shaped",
+      "May blanch (lighten) briefly when pressed",
+      "Usually stable over time"
+    ],
+    "warning_signs": [
+      "Rapid growth in size or number",
+      "Persistent bleeding or a lesion that does not stop bleeding easily",
+      "Sudden change in color or shape",
+      "Pain or ulceration"
+    ],
+    "general_care": [
+      "Usually no treatment needed",
+      "Avoid trauma to the area (they can bleed if scraped)",
+      "Monitor for any changes over time"
+    ],
+    "professional_advice": "Vascular lesions are typically benign. If it bleeds persistently, grows quickly, or changes noticeably, have it evaluated by a dermatologist."
+  }
+}
