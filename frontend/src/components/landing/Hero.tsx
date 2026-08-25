@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRightIcon, SparklesIcon } from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 import { ButtonLink } from '../Button';
 
 const rise = {
@@ -26,18 +26,9 @@ export function Hero() {
 
       <div className="relative mx-auto grid max-w-page items-center gap-12 px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
         <div>
-          <motion.span
-            {...rise}
-            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3.5 py-2 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-700 shadow-card">
-            
-            <SparklesIcon className="h-3.5 w-3.5 text-gold-500" aria-hidden="true" />
-            AI-assisted skin health
-          </motion.span>
-
           <motion.h1
             {...rise}
-            transition={{ duration: 0.35, delay: 0.05, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
             className="mt-6 text-[38px] font-bold leading-[1.04] tracking-[-0.04em] text-ink-900 sm:text-[56px] lg:text-[64px]">
             
             Understand your skin.

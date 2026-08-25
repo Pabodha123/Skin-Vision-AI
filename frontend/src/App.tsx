@@ -19,14 +19,30 @@ function ScrollManager() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
+    if (!hash) {
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    // Navigating from another page swaps in the new page via an exit/enter
+    // animation, so the target section may not be mounted yet on the first
+    // frame - retry for a bit instead of immediately falling back to top.
+    let raf = 0;
+    let attempts = 0;
+    const tryScroll = () => {
       const el = document.querySelector(hash);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
-    }
-    window.scrollTo({ top: 0 });
+      attempts += 1;
+      if (attempts < 40) {
+        raf = requestAnimationFrame(tryScroll);
+      }
+    };
+    tryScroll();
+
+    return () => cancelAnimationFrame(raf);
   }, [pathname, hash]);
 
   return null;

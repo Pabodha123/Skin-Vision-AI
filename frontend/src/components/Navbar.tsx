@@ -42,7 +42,7 @@ export function Navbar() {
 
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => {
-            const active = link.href === location.pathname;
+            const active = link.href.split('#')[0] === location.pathname;
             return (
               <Link
                 key={link.label}
