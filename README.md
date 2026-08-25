@@ -88,6 +88,20 @@ Reports accuracy, per-class precision/recall/F1, macro ROC-AUC, and saves a conf
 python app.py
 ```
 
+## Results
+
+EfficientNet-B0 trained for 15 epochs on the lesion-grouped, stratified split, evaluated on the 1,431-image held-out test set (never seen during training):
+
+| Metric | Score |
+| --- | --- |
+| Test accuracy | 82.4% |
+| Macro F1 | 0.663 |
+| Macro ROC-AUC (OVR) | 0.953 |
+
+![Confusion matrix](outputs/confusion_matrix.png)
+
+Melanocytic Nevus (the dominant class) reaches 0.92 F1; the rarest class, Dermatofibroma, is the weakest at 0.46 F1 — expected given it has only 17 test images. Full per-class precision/recall/F1 is in `outputs/evaluation_report.json`.
+
 ## Limitations & disclaimer
 
 SkinVision AI is an educational AI project and is **not** a medical diagnostic tool. Predictions are generated from image patterns and may be incorrect. They should not replace examination or advice from a qualified healthcare professional. For potentially concerning predictions, professional evaluation is always recommended — this application does not, and should not, prescribe treatment.
