@@ -1,0 +1,84 @@
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+body {
+  background-color: #faf7f1;
+  color: #17130f;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+*:focus-visible {
+  outline: 2px solid #b08b4f;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+::selection {
+  background: #f5ebd8;
+  color: #241e18;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(300%);
+  }
+}
+.animate-scanline {
+  animation: scanline 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+@keyframes haloPulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.015);
+  }
+}
+.animate-halo {
+  animation: haloPulse 2.8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% {
+    background-position: -160% 0;
+  }
+  100% {
+    background-position: 260% 0;
+  }
+}
+.skeleton {
+  background-image: linear-gradient(90deg, #f1ebe1 0%, #faf7f1 42%, #f1ebe1 84%);
+  background-size: 220% 100%;
+  animation: shimmer 2.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-scanline,
+  .animate-halo,
+  .skeleton {
+    animation: none;
+  }
+}
