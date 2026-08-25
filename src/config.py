@@ -13,7 +13,7 @@ BATCH_SIZE = 32
 
 NUM_CLASSES = 7
 
-NUM_EPOCHS = 3  # TODO: bump back up (e.g. 15-20) for the real full training run
+NUM_EPOCHS = 15
 
 LEARNING_RATE = 0.0001
 
