@@ -94,6 +94,7 @@ async def analyze(file: UploadFile = File(...)):
             for p in result["top_predictions"]
         ],
         "riskLevel": RISK_LEVEL_MAP.get(rec["risk_tier"], "info"),
+        "noLesionCaveat": rec["no_lesion_caveat"],
         "condition": {
             "name": rec["name"],
             "shortName": rec["short_name"],

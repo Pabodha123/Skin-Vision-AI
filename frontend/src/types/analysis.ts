@@ -28,6 +28,7 @@ export interface AnalysisResult {
   };
   predictions: Prediction[];
   riskLevel: RiskLevel;
+  noLesionCaveat: string;
   condition: ConditionInfoData;
 }
 

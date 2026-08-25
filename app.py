@@ -47,6 +47,7 @@ def analyze(image):
         f"## AI Prediction: {result['predicted_name']}\n"
         f"**Confidence:** {result['confidence']:.1%}\n\n"
         "*This is a model prediction, not a medical diagnosis.*\n\n"
+        f"> ℹ️ {rec['no_lesion_caveat']}\n\n"
         "### Top 3 Predictions\n"
         + "".join(f"- **{p['name']}** — {p['confidence']:.1%}\n" for p in result["top_predictions"])
     )

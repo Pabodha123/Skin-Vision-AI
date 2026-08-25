@@ -1,5 +1,5 @@
 import React from 'react';
-import { SparklesIcon } from 'lucide-react';
+import { InfoIcon, SparklesIcon } from 'lucide-react';
 import { Card } from './Card';
 import { ConfidenceRing } from './ConfidenceRing';
 import { ConfidenceBar } from './ConfidenceBar';
@@ -55,6 +55,11 @@ export function PredictionCard({ result }: {result: AnalysisResult;}) {
 
           )}
         </div>
+      </div>
+
+      <div className="flex items-start gap-2.5 border-t border-line bg-coral-50 px-5 py-4 sm:px-8">
+        <InfoIcon className="mt-0.5 h-4 w-4 shrink-0 text-coral-500" aria-hidden="true" />
+        <p className="text-[13px] leading-relaxed text-coral-700">{result.noLesionCaveat}</p>
       </div>
 
       <div className="rounded-b-3xl border-t border-line bg-gold-50 px-5 py-5 sm:px-8">

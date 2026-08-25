@@ -27,6 +27,8 @@ export const mockResult: AnalysisResult = {
   { label: 'Benign Keratosis', confidence: 3.1 }],
 
   riskLevel: 'info',
+  noLesionCaveat:
+  'This model only classifies images into one of 7 known lesion types — it cannot detect whether skin is healthy or lesion-free. If the photographed area doesn\'t show a distinct mole, spot, or growth, this prediction is not meaningful, no matter how high the confidence score is.',
   condition: {
     name: 'Melanocytic Nevus',
     shortName: 'Common mole',

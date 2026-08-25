@@ -16,6 +16,17 @@ DISCLAIMER = (
     "replace examination or advice from a qualified healthcare professional."
 )
 
+# The model only knows 7 lesion categories - it has no "healthy skin" or "no lesion"
+# option, so it always picks the closest of the 7 even when nothing resembling a
+# lesion is present. A high confidence score reflects certainty about the closest
+# match among those 7, not certainty that a lesion is actually there.
+NO_LESION_CAVEAT = (
+    "This model only classifies images into one of 7 known lesion types — it cannot "
+    "detect whether skin is healthy or lesion-free. If the photographed area doesn't "
+    "show a distinct mole, spot, or growth, this prediction is not meaningful, no "
+    "matter how high the confidence score is."
+)
+
 LOW_CONFIDENCE_THRESHOLD = 0.5
 
 RISK_TIER_LABELS = {
@@ -48,6 +59,7 @@ def get_recommendation(predicted_code, confidence=None):
     info["code"] = predicted_code
     info["risk_tier_label"] = RISK_TIER_LABELS[info["risk_tier"]]
     info["disclaimer"] = DISCLAIMER
+    info["no_lesion_caveat"] = NO_LESION_CAVEAT
     info["general_skin_health_tips"] = GENERAL_SKIN_HEALTH_TIPS
 
     if confidence is not None and confidence < LOW_CONFIDENCE_THRESHOLD:
