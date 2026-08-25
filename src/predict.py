@@ -12,8 +12,20 @@ from utils import get_device, load_checkpoint
 
 CHECKPOINT_PATH = os.path.join(MODELS_DIR, "best_model.pth")
 
+# checkpoint isn't committed to git (too large) - deployments without a local
+# copy fetch it from the model's own HF Hub repo on first use instead
+HF_MODEL_REPO = "pthennakoon25/skinvision-ai-model"
+HF_MODEL_FILE = "best_model.pth"
+
 _model = None
 _device = None
+
+
+def _resolve_checkpoint_path():
+    if os.path.exists(CHECKPOINT_PATH):
+        return CHECKPOINT_PATH
+    from huggingface_hub import hf_hub_download
+    return hf_hub_download(repo_id=HF_MODEL_REPO, filename=HF_MODEL_FILE)
 
 
 def _load_model():
@@ -21,7 +33,7 @@ def _load_model():
     if _model is None:
         _device = get_device(DEVICE)
         _model = build_model(num_classes=NUM_CLASSES).to(_device)
-        _model = load_checkpoint(_model, CHECKPOINT_PATH, _device)
+        _model = load_checkpoint(_model, _resolve_checkpoint_path(), _device)
         _model.eval()
     return _model, _device
 
